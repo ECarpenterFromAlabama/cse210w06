@@ -1,4 +1,10 @@
+import imp
+import random
 from game.terminal_service import TerminalService
+from game.duelist.player import Player
+from game.duelist.enemy import Enemy
+from game.handle_combat import HandleCombat
+from constants import DEFEAT_MSG, VIC_MSG, spell_list
 
 
 class Director:
@@ -19,6 +25,20 @@ class Director:
         Args:
             self (Director): an instance of Director.
         """
+        self._is_playing = True
+        self.level = 1
+        self.terminal_service = TerminalService()
+        self.combat = HandleCombat()
+        self.player_wizard = Player()
+        self.enemy_types = ['red', 'blue', 'white', 'black']
+        self.enemy_wizards = []
+        for type in self.enemy_types:
+            self.enemy_wizards.append(Enemy(type))
+        self.current_enemy = self.enemy_wizards[self.level-1]
+
+        self.start_round = True
+        self.player_choice = 0
+        self.enemy_choice = ''
 
     def start_game(self):
         """Starts the game by running the main game loop.
@@ -37,8 +57,24 @@ class Director:
         Args:
             self (Director): An instance of Director.
         """
-        new_location = self._terminal_service.read_number("\nEnter a location [1-1000]: ")
-        self._seeker.move_location(new_location)
+
+        self.round_start()
+        player_spells = self.player_wizard.avail_spells()
+        self.terminal_service.write_text('Please choose the spell you will use:')
+        self.player_wizard.print_spells(player_spells)
+        self.terminal_service.write_text(f'Your current life: {self.player_wizard.get_life()}')
+        self.terminal_service.write_text(f'Your opponent\'s life: {self.current_enemy.get_life()}')
+        casted = False
+        while(not casted):
+            prompt = 'Pick the spell by typing its corresponding menu number:'
+            try:
+                number_choice = self.terminal_service.read_number(prompt)-1
+                spells_list = list(player_spells.keys())
+                self.player_choice = spells_list[number_choice]
+            except:
+                self.terminal_service.write_text('Please select a number value that corresponds to the menu:')
+            casted = self.player_wizard.cast_spell(self.player_choice)
+
         
     def _do_updates(self):
         """Keeps watch on where the seeker is moving.
@@ -46,7 +82,9 @@ class Director:
         Args:
             self (Director): An instance of Director.
         """
-        self._hider.watch_seeker(self._seeker)
+        self.combat.do_combat(self.current_enemy, self.player_wizard, self.player_choice)
+        
+
         
     def _do_outputs(self):
         """Provides a hint for the seeker to use.
@@ -54,7 +92,23 @@ class Director:
         Args:
             self (Director): An instance of Director.
         """
-        hint = self._hider.get_hint()
-        self._terminal_service.write_text(hint)
-        if self._hider.is_found():
+        if(self.player_wizard.get_life() == 0):
+            self.terminal_service.write_text(DEFEAT_MSG)
             self._is_playing = False
+        elif(self.current_enemy.get_life() == 0):
+            self.terminal_service.write_text(VIC_MSG)
+            self.level += 1
+            self.player_wizard.level_up()
+            self.start_round = True
+            if(self.level > 4):
+                self.terminal_service.write_text('Congratulations! You are the strongest wizard!')
+                self._is_playing = False
+
+
+    def round_start(self):
+        opponent = self.enemy_types[self.level-1]
+        if self.start_round:
+            self.terminal_service.write_text(f'The {opponent} wizard approaches.')
+            self.player_wizard.setup_duelist()
+            self.current_enemy = self.enemy_wizards[self.level-1]
+            self.start_round = False
