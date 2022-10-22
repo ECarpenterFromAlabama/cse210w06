@@ -1,14 +1,14 @@
 # Wizards Duel
 Enjoy the tactical treat that is the Wizards Duel! In this paper-rock-sciscors-like game, battle your way throught the 4 mages to become the strongest mage possible. In the begining you can use each elemental spell 2 times each.
 
-The options can be described as the following:
-🔥 Fire = Beats Ice, loses to Lightning
-❄️ Ice = Beats Lightning, loses to Fire
-⚡ Lightning = Beats Fire, loses to Ice
+The options can be described as the following:<br>
+🔥 Fire = Beats Ice, loses to Lightning<br>
+❄️ Ice = Beats Lightning, loses to Fire<br>
+⚡ Lightning = Beats Fire, loses to Ice<br>
 
-Additionally, as your wizard "level's up" you gain more uses of each elemental spell. You also gain the following two spells as you level up:
-🛡️ Shield = Forces a tie(makes the opponent waste one use of their spells)
-💀 Overkill = Wins against any offensive spell and is blocked by Shield
+Additionally, as your wizard "level's up" you gain more uses of each elemental spell. You also gain the following two spells as you level up:<br>
+🛡️ Shield = Forces a tie(makes the opponent waste one use of their spells)<br>
+💀 Overkill = Wins against any offensive spell and is blocked by Shield<br>
 
 ---
 ## Getting Started
