@@ -12,8 +12,6 @@ class Enemy(Duelist):
             self.add_spell('Fire', 4)
             self.add_spell('Ice', 1)
             self.add_spell('Lightning', 2)      
-            for spell in self._spell_dict:
-                print(f'{spell} x {self._spell_dict[spell]}')  
         
         elif type == 'blue':
             self.add_spell('Fire', 1)
