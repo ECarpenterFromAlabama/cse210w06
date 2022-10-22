@@ -4,7 +4,7 @@ from game.terminal_service import TerminalService
 from game.duelist.player import Player
 from game.duelist.enemy import Enemy
 from game.handle_combat import HandleCombat
-from constants import DEFEAT_MSG, VIC_MSG, spell_list
+from constants import DEFEAT_MSG, VIC_MSG, spell_list, RETRY_MSG
 
 
 class Director:
@@ -37,7 +37,7 @@ class Director:
         self.current_enemy = self.enemy_wizards[self.level-1]
 
         self.start_round = True
-        self.player_choice = 0
+        self.player_choice = 'Fire'
         self.enemy_choice = ''
 
     def start_game(self):
@@ -71,9 +71,12 @@ class Director:
                 number_choice = self.terminal_service.read_number(prompt)-1
                 spells_list = list(player_spells.keys())
                 self.player_choice = spells_list[number_choice]
+                casted = self.player_wizard.cast_spell(self.player_choice)
             except:
-                self.terminal_service.write_text('Please select a number value that corresponds to the menu:')
-            casted = self.player_wizard.cast_spell(self.player_choice)
+                pass         
+            
+            if (not casted):
+                self.terminal_service.write_text(RETRY_MSG)
 
         
     def _do_updates(self):
