@@ -26,7 +26,7 @@ class HandleCombat:
         enemy_victory = \
             enemy_spell is 'Overkill' and player_spell is not 'Shield' or \
             enemy_spell is 'Fire' and player_spell is 'Ice' or \
-            enemy_spell is 'Ice' and player_spell is 'lightning' or \
+            enemy_spell is 'Ice' and player_spell is 'Lightning' or \
             enemy_spell is 'Lightning' and player_spell is 'Fire'
         tie = \
             player_spell is 'Shield' or \
